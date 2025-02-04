@@ -4,6 +4,7 @@
              xmlns:local="clr-namespace:WpfLocalLLM"
              StartupUri="MainWindow.xaml">
     <Application.Resources>
-         
+        <local:RoleToBrushConverter x:Key="RoleToBrushConverter"/>
+        <local:RoleToBackgroundConverter x:Key="RoleToBackgroundConverter"/>
     </Application.Resources>
 </Application>

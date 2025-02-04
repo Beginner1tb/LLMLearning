@@ -19,6 +19,8 @@
                         <Border Margin="5" 
                                 Padding="10"
                                 BorderThickness="1"
+                
+                                
                                 BorderBrush="{Binding Role, Converter={StaticResource RoleToBrushConverter}}"
                                 Background="{Binding Role, Converter={StaticResource RoleToBackgroundConverter}}"
                                 CornerRadius="5">
