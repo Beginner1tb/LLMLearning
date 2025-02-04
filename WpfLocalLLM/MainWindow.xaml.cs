@@ -165,44 +165,9 @@ namespace WpfLocalLLM
             }
         }
 
-        private void ScrollToBottomAnimation()
+        private void ModelSelect_SelectionChanged(object sender, SelectionChangedEventArgs e)
         {
-            ChatScrollViewer.Dispatcher.InvokeAsync(() =>
-            {
-                var animation = new DoubleAnimation(
-                    ChatScrollViewer.VerticalOffset,
-                    ChatScrollViewer.ScrollableHeight,
-                    TimeSpan.FromMilliseconds(200));
-                ChatScrollViewer.BeginAnimation(ScrollViewerBehavior.VerticalOffsetProperty, animation);
-            });
-        }
-
-        // 需要添加一个附加属性来支持动画
-        public static class ScrollViewerBehavior
-        {
-            public static readonly DependencyProperty VerticalOffsetProperty = DependencyProperty.RegisterAttached(
-                "VerticalOffset",
-                typeof(double),
-                typeof(ScrollViewerBehavior),
-                new UIPropertyMetadata(0.0, OnVerticalOffsetChanged));
-
-            public static void SetVerticalOffset(FrameworkElement target, double value)
-            {
-                target.SetValue(VerticalOffsetProperty, value);
-            }
-
-            public static double GetVerticalOffset(FrameworkElement target)
-            {
-                return (double)target.GetValue(VerticalOffsetProperty);
-            }
-
-            private static void OnVerticalOffsetChanged(DependencyObject target, DependencyPropertyChangedEventArgs e)
-            {
-                if (target is ScrollViewer scrollViewer)
-                {
-                    scrollViewer.ScrollToVerticalOffset((double)e.NewValue);
-                }
-            }
+            _selectedModel = (ModelSelect.SelectedItem as ModelInfo)?.Id;
         }
 
         private void MessageInput_KeyDown(object sender, System.Windows.Input.KeyEventArgs e)

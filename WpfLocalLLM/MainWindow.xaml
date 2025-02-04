@@ -79,7 +79,8 @@
                         <Label Content="模型: " VerticalAlignment="Center"/>
                         <ComboBox x:Name="ModelSelect" 
                                  Grid.Column="1" 
-                                 Margin="5,0"/>
+                                 Margin="5,0"
+                                  SelectionChanged="ModelSelect_SelectionChanged"/>
                         <Button Grid.Column="2" 
                                 Content="刷新模型" 
                                 Width="80"
