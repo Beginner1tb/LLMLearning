@@ -89,7 +89,7 @@
             </Expander>
         </StackPanel>
 
-        <ScrollViewer Grid.Row="1">
+        <ScrollViewer Grid.Row="1" x:Name="ChatScrollViewer">
             <Grid>
                 <ItemsControl x:Name="ChatMessages">
                     <ItemsControl.ItemTemplate>

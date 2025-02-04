@@ -4,6 +4,7 @@ using System.Collections.ObjectModel;
 using System.Net.Http;
 using System.Text;
 using System.Windows;
+using System.Windows.Controls;
 using System.Windows.Input;
 using System.Windows.Media.Animation;
 
@@ -107,8 +108,10 @@ namespace WpfLocalLLM
 
             var userMessage = new ChatMessage { Role = "我(user): ", Content = MessageInput.Text };
             Messages.Add(userMessage);
+            
             MessageInput.Clear();
-
+            // 滚动到底部
+            ChatScrollViewer.ScrollToBottom();
             ShowLoading();
 
             try
@@ -146,6 +149,9 @@ namespace WpfLocalLLM
                 };
 
                 Messages.Add(assistantMessage);
+                // 滚动到底部
+                ChatScrollViewer.ScrollToBottom();
+
             }
             catch (Exception ex)
             {
@@ -154,6 +160,48 @@ namespace WpfLocalLLM
             finally
             {
                 HideLoading();  // 隐藏加载动画
+                // 重新聚焦到输入框
+                MessageInput.Focus();
+            }
+        }
+
+        private void ScrollToBottomAnimation()
+        {
+            ChatScrollViewer.Dispatcher.InvokeAsync(() =>
+            {
+                var animation = new DoubleAnimation(
+                    ChatScrollViewer.VerticalOffset,
+                    ChatScrollViewer.ScrollableHeight,
+                    TimeSpan.FromMilliseconds(200));
+                ChatScrollViewer.BeginAnimation(ScrollViewerBehavior.VerticalOffsetProperty, animation);
+            });
+        }
+
+        // 需要添加一个附加属性来支持动画
+        public static class ScrollViewerBehavior
+        {
+            public static readonly DependencyProperty VerticalOffsetProperty = DependencyProperty.RegisterAttached(
+                "VerticalOffset",
+                typeof(double),
+                typeof(ScrollViewerBehavior),
+                new UIPropertyMetadata(0.0, OnVerticalOffsetChanged));
+
+            public static void SetVerticalOffset(FrameworkElement target, double value)
+            {
+                target.SetValue(VerticalOffsetProperty, value);
+            }
+
+            public static double GetVerticalOffset(FrameworkElement target)
+            {
+                return (double)target.GetValue(VerticalOffsetProperty);
+            }
+
+            private static void OnVerticalOffsetChanged(DependencyObject target, DependencyPropertyChangedEventArgs e)
+            {
+                if (target is ScrollViewer scrollViewer)
+                {
+                    scrollViewer.ScrollToVerticalOffset((double)e.NewValue);
+                }
             }
         }
 
